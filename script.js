@@ -2,7 +2,6 @@ function switchForm(formId) {
   document.querySelectorAll(".form").forEach((f) => f.classList.add("hidden"));
   document.getElementById(formId).classList.remove("hidden");
 }
-
 function togglePassword(id) {
   const input = document.getElementById(id);
   input.type = input.type === "password" ? "text" : "password";
@@ -10,8 +9,21 @@ function togglePassword(id) {
 
 let users = JSON.parse(localStorage.getItem("users")) || [];
 let currentUser = null;
+let cart = [];
 
-// Signup
+// MAPBOX
+mapboxgl.accessToken = "YOUR_MAPBOX_ACCESS_TOKEN";
+const map = new mapboxgl.Map({
+  container: "map",
+  style: "mapbox://styles/mapbox/streets-v12",
+  center: [28.0473, -26.2041],
+  zoom: 12,
+});
+const driverMarker = new mapboxgl.Marker({ color: "green" })
+  .setLngLat([28.0473, -26.2041])
+  .addTo(map);
+
+// SIGNUP
 document.getElementById("signupForm").addEventListener("submit", (e) => {
   e.preventDefault();
   const username = document.getElementById("signupUsername").value;
@@ -47,7 +59,7 @@ document.getElementById("signupForm").addEventListener("submit", (e) => {
   else reader.onload();
 });
 
-// Login
+// LOGIN
 document.getElementById("loginForm").addEventListener("submit", (e) => {
   e.preventDefault();
   const username = document.getElementById("loginUsername").value;
@@ -60,6 +72,7 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
     document.getElementById("auth-section").classList.add("hidden");
     document.getElementById("app-section").classList.remove("hidden");
     loadProfile();
+    renderCart();
   } else alert("Invalid credentials");
 });
 
@@ -98,9 +111,7 @@ function saveProfile() {
 
 function updateStorage() {
   const index = users.findIndex((u) => u.username === currentUser.username);
-  if (index >= 0) {
-    users[index] = currentUser;
-  }
+  if (index >= 0) users[index] = currentUser;
   localStorage.setItem("users", JSON.stringify(users));
 }
 
@@ -120,17 +131,72 @@ document
   .getElementById("profile-btn")
   .addEventListener("click", () => openModal("profile-modal"));
 
-// SIMULATED ORDER & DRIVER TRACKING
+// ORDER & DRIVER TRACKING
 function simulateOrder() {
   const status = document.getElementById("order-status");
   status.innerText = "🚚 Your order is on the way!";
-  let progress = 0;
+  let route = [
+    [28.0473, -26.2041],
+    [28.048, -26.205],
+    [28.05, -26.206],
+    [28.053, -26.207],
+    [28.057, -26.21],
+  ];
+  let step = 0;
   const interval = setInterval(() => {
-    progress += 10;
-    status.innerText = `🚚 Driver is ${progress}% of the way`;
-    if (progress >= 100) {
+    if (step < route.length) {
+      driverMarker.setLngLat(route[step]);
+      step++;
+      status.innerText = `🚚 Driver is ${Math.floor(
+        (step / route.length) * 100
+      )}% of the way`;
+    } else {
       clearInterval(interval);
       status.innerText = "✅ Order delivered!";
     }
   }, 1000);
+}
+
+// CART & PRODUCTS
+function openProductModal(name, price) {
+  document.getElementById("product-name").innerText = name;
+  document.getElementById("product-price").innerText = price;
+  document.getElementById("product-qty").value = 1;
+  document.getElementById("product-total").innerText = price;
+  openModal("product-modal");
+
+  document.getElementById("product-qty").oninput = () => {
+    const qty = parseInt(document.getElementById("product-qty").value);
+    document.getElementById("product-total").innerText = price * qty;
+  };
+  document.getElementById("product-modal").dataset.currentPrice = price;
+  document.getElementById("product-modal").dataset.currentName = name;
+}
+
+function addProductToCart() {
+  const qty = parseInt(document.getElementById("product-qty").value);
+  const price = parseInt(
+    document.getElementById("product-modal").dataset.currentPrice
+  );
+  const name = document.getElementById("product-modal").dataset.currentName;
+  for (let i = 0; i < qty; i++) cart.push({ name, price });
+  renderCart();
+  closeModal("product-modal");
+}
+
+function renderCart() {
+  const cartSection = document.getElementById("cart-section");
+  if (cart.length === 0) {
+    cartSection.classList.add("hidden");
+    return;
+  }
+  cartSection.classList.remove("hidden");
+  let html = "<h3>🛒 Your Cart</h3>";
+  let total = 0;
+  cart.forEach((item) => {
+    html += `<p>${item.name} - $${item.price}</p>`;
+    total += item.price;
+  });
+  html += `<strong>Total: $${total}</strong>`;
+  cartSection.innerHTML = html;
 }

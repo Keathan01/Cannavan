@@ -1,4 +1,7 @@
-body { font-family: Arial,sans-serif; margin:0; padding:0; background:#111; color:#eee; text-align:center; }
+body {
+  font-family: Arial,sans-serif;
+  margin:0; padding:0; background:#111; color:#eee; text-align:center;
+}
 img { max-width:100%; }
 .hidden { display:none; }
 .auth-container, .section-container { margin:20px auto; padding:20px; max-width:500px; background:#222; border-radius:12px; }
@@ -14,7 +17,7 @@ button:hover { opacity:0.8; }
 
 /* Delivery Section */
 #delivery-section { background:#333; padding:15px; border-radius:10px; margin-bottom:20px; }
-#map-placeholder { background:#555; color:#fff; height:150px; display:flex; justify-content:center; align-items:center; border-radius:8px; margin:10px 0; }
+#map { background:#555; border-radius:8px; margin:10px 0; }
 
 /* Products Grid */
 .categories-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
