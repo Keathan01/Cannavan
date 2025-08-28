@@ -1,0 +1,42 @@
+/* Reset margins/padding so background fills entire screen */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Full-page background image */
+body {
+  background-image: url("images/background.jpg"); /* adjust path/name */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Flexbox layout for heading + video */
+.hero {
+  display: flex;
+  justify-content: center;   /* centers horizontally */
+  align-items: center;       /* centers vertically */
+  gap: 20px;                 /* space between h1 and video */
+  height: 100vh;             /* full viewport height */
+  text-align: center;
+}
+
+/* Style heading */
+.hero h1 {
+  color: white;
+  font-size: 3rem;
+  font-family: Arial, sans-serif;
+  text-shadow: 2px 2px 5px black;
+}
+
+/* Style video */
+.side-video {
+  width: 400px;   /* adjust to your liking */
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  object-fit: cover; /* keeps video nicely cropped */
+}
