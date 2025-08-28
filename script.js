@@ -2,6 +2,7 @@ function switchForm(formId) {
   document.querySelectorAll(".form").forEach((f) => f.classList.add("hidden"));
   document.getElementById(formId).classList.remove("hidden");
 }
+
 function togglePassword(id) {
   const input = document.getElementById(id);
   input.type = input.type === "password" ? "text" : "password";
@@ -12,13 +13,14 @@ let currentUser = null;
 let cart = [];
 
 // MAPBOX
-mapboxgl.accessToken = "YOUR_MAPBOX_ACCESS_TOKEN";
+mapboxgl.accessToken = "YOUR_MAPBOX_ACCESS_TOKEN"; // Replace this with your real token
 const map = new mapboxgl.Map({
   container: "map",
   style: "mapbox://styles/mapbox/streets-v12",
   center: [28.0473, -26.2041],
   zoom: 12,
 });
+
 const driverMarker = new mapboxgl.Marker({ color: "green" })
   .setLngLat([28.0473, -26.2041])
   .addTo(map);
@@ -67,13 +69,18 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
   const user = users.find(
     (u) => u.username === username && u.password === password
   );
-  if (user) {
+
+  if (!users || users.length === 0) {
+    alert("No users found. Please sign up first.");
+  } else if (user) {
     currentUser = user;
     document.getElementById("auth-section").classList.add("hidden");
     document.getElementById("app-section").classList.remove("hidden");
     loadProfile();
     renderCart();
-  } else alert("Invalid credentials");
+  } else {
+    alert("Invalid username or password.");
+  }
 });
 
 function loadProfile() {
@@ -124,14 +131,15 @@ function logout() {
 function openModal(id) {
   document.getElementById(id).style.display = "flex";
 }
+
 function closeModal(id) {
   document.getElementById(id).style.display = "none";
 }
+
 document
   .getElementById("profile-btn")
   .addEventListener("click", () => openModal("profile-modal"));
 
-// ORDER & DRIVER TRACKING
 function simulateOrder() {
   const status = document.getElementById("order-status");
   status.innerText = "🚚 Your order is on the way!";
@@ -157,7 +165,6 @@ function simulateOrder() {
   }, 1000);
 }
 
-// CART & PRODUCTS
 function openProductModal(name, price) {
   document.getElementById("product-name").innerText = name;
   document.getElementById("product-price").innerText = price;
