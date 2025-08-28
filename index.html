@@ -7,13 +7,83 @@
   <title>Canna Van</title>
 </head>
 <body>
+  <!-- Hero Section -->
   <div class="hero">
-    <h1>Canna Van</h1>
+    <div class="hero-content">
+      <h1>Canna Van</h1>
+      <!-- Login Form -->
+      <form class="login-form">
+        <input type="text" placeholder="Username" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
     <!-- Video without runtime/controls -->
     <video autoplay muted loop class="side-video">
       <source src="videos/tfggckfklrk11.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
   </div>
+
+  <!-- Strain Section -->
+  <section class="strains">
+    <div class="strain-card" onclick="openModal('sativaModal')">
+      <img src="sativa.jpg" alt="Sativa">
+      <h2>Sativa</h2>
+    </div>
+
+    <div class="strain-card" onclick="openModal('indicaModal')">
+      <img src="indica.jpg" alt="Indica">
+      <h2>Indica</h2>
+    </div>
+
+    <div class="strain-card" onclick="openModal('hybridModal')">
+      <img src="hybrid.jpg" alt="Hybrid">
+      <h2>Hybrid</h2>
+    </div>
+
+    <div class="strain-card" onclick="openModal('cbdModal')">
+      <img src="cbd.jpg" alt="CBD">
+      <h2>CBD</h2>
+    </div>
+  </section>
+
+  <!-- Modals -->
+  <div id="sativaModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('sativaModal')">&times;</span>
+      <h2>Sativa</h2>
+      <p>🌿 Sativa is like sunshine in a plant — light, uplifting, and energising...</p>
+    </div>
+  </div>
+
+  <div id="indicaModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('indicaModal')">&times;</span>
+      <h2>Indica</h2>
+      <p>🌙 Indica is like a cozy blanket in a cup — rich, soothing, and deeply relaxing...</p>
+    </div>
+  </div>
+
+  <div id="hybridModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('hybridModal')">&times;</span>
+      <h2>Hybrid</h2>
+      <img src="Hybrid.jpg">
+      <p>✨ Hybrid blends the best of both worlds, balancing Sativa’s energy with Indica’s calm...</p>
+    </div>
+  </div>
+
+  <div id="cbdModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('cbdModal')">&times;</span>
+      <h2>CBD</h2>
+      <img src="CBD-oils.jpg">
+      <p>💧 CBD offers soothing relaxation without the high, perfect for wellness and balance...</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

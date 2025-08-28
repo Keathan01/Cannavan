@@ -1,42 +1,125 @@
-/* Reset margins/padding so background fills entire screen */
+/* Reset + background */
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
 }
 
-/* Full-page background image */
 body {
-  background-image: url("images/background.jpg"); /* adjust path/name */
+  background-image: url("images/background.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  font-family: Arial, sans-serif;
+  color: white;
 }
 
-/* Flexbox layout for heading + video */
+/* Hero Section */
 .hero {
   display: flex;
-  justify-content: center;   /* centers horizontally */
-  align-items: center;       /* centers vertically */
-  gap: 20px;                 /* space between h1 and video */
-  height: 100vh;             /* full viewport height */
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  height: 80vh;
   text-align: center;
 }
 
-/* Style heading */
-.hero h1 {
-  color: white;
-  font-size: 3rem;
-  font-family: Arial, sans-serif;
-  text-shadow: 2px 2px 5px black;
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Style video */
+.hero h1 {
+  font-size: 3.5rem;
+  text-shadow: 2px 2px 8px black;
+  margin-bottom: 20px;
+}
+
+/* Login Form */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-form input {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+
+.login-form button {
+  padding: 10px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .side-video {
-  width: 400px;   /* adjust to your liking */
+  width: 400px;
   height: auto;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-  object-fit: cover; /* keeps video nicely cropped */
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+
+/* Strain Section - 2x2 Grid */
+.strains {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  padding: 40px;
+}
+
+.strain-card {
+  background: rgba(0,0,0,0.6);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.strain-card:hover {
+  transform: scale(1.05);
+}
+
+.strain-card img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+/* Modal Styling */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+  background: white;
+  color: black;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 500px;
+  text-align: center;
+}
+
+.close {
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
 }
