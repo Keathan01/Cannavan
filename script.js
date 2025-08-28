@@ -1,113 +1,136 @@
-// ===== AUTH LOGIC =====
+function switchForm(formId) {
+  document.querySelectorAll(".form").forEach((f) => f.classList.add("hidden"));
+  document.getElementById(formId).classList.remove("hidden");
+}
+
+function togglePassword(id) {
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+}
+
 let users = JSON.parse(localStorage.getItem("users")) || [];
 let currentUser = null;
 
-function showSignup() {
-  document.getElementById("login-form").style.display = "none";
-  document.getElementById("signup-form").style.display = "block";
-}
-
-function showLogin() {
-  document.getElementById("signup-form").style.display = "none";
-  document.getElementById("login-form").style.display = "block";
-}
-
-function signup() {
-  const username = document.getElementById("signup-username").value;
-  const password = document.getElementById("signup-password").value;
-  const email = document.getElementById("signup-email").value;
-
-  if (!username || !password || !email) {
-    alert("All fields required!");
+// Signup
+document.getElementById("signupForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const username = document.getElementById("signupUsername").value;
+  const password = document.getElementById("signupPassword").value;
+  const confirm = document.getElementById("confirmPassword").value;
+  if (password !== confirm) {
+    alert("Passwords do not match");
     return;
   }
-
-  if (users.find((u) => u.username === username)) {
-    alert("User already exists!");
+  if (users.some((u) => u.username === username)) {
+    alert("Username taken");
     return;
   }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const user = {
+      fullName: document.getElementById("fullName").value,
+      idNumber: document.getElementById("idNumber").value,
+      dob: document.getElementById("dob").value,
+      email: document.getElementById("email").value,
+      address: document.getElementById("address").value,
+      username,
+      password,
+      pic: reader.result,
+    };
+    users.push(user);
+    localStorage.setItem("users", JSON.stringify(users));
+    alert("Signup successful!");
+    switchForm("loginForm");
+  };
+  const file = document.getElementById("profilePic").files[0];
+  if (file) reader.readAsDataURL(file);
+  else reader.onload();
+});
 
-  const newUser = { username, password, email, profile: {} };
-  users.push(newUser);
-  localStorage.setItem("users", JSON.stringify(users));
-  alert("Account created! Please login.");
-  showLogin();
-}
-
-function login() {
-  const username = document.getElementById("login-username").value;
-  const password = document.getElementById("login-password").value;
-
+// Login
+document.getElementById("loginForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const username = document.getElementById("loginUsername").value;
+  const password = document.getElementById("loginPassword").value;
   const user = users.find(
     (u) => u.username === username && u.password === password
   );
-
   if (user) {
     currentUser = user;
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
-    document.getElementById("auth-section").style.display = "none";
-    document.getElementById("app-section").style.display = "block";
+    document.getElementById("auth-section").classList.add("hidden");
+    document.getElementById("app-section").classList.remove("hidden");
     loadProfile();
+  } else alert("Invalid credentials");
+});
+
+function loadProfile() {
+  document.getElementById("user-name").innerText = currentUser.fullName;
+  document.getElementById("profile-img").src = currentUser.pic || "";
+  document.getElementById("edit-fullName").value = currentUser.fullName;
+  document.getElementById("edit-idNumber").value = currentUser.idNumber;
+  document.getElementById("edit-dob").value = currentUser.dob;
+  document.getElementById("edit-email").value = currentUser.email;
+  document.getElementById("edit-address").value = currentUser.address;
+}
+
+function saveProfile() {
+  currentUser.fullName = document.getElementById("edit-fullName").value;
+  currentUser.idNumber = document.getElementById("edit-idNumber").value;
+  currentUser.dob = document.getElementById("edit-dob").value;
+  currentUser.email = document.getElementById("edit-email").value;
+  currentUser.address = document.getElementById("edit-address").value;
+  const file = document.getElementById("edit-pic").files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      currentUser.pic = reader.result;
+      updateStorage();
+      loadProfile();
+      alert("Profile updated!");
+    };
+    reader.readAsDataURL(file);
   } else {
-    alert("Invalid credentials");
+    updateStorage();
+    loadProfile();
+    alert("Profile updated!");
   }
+}
+
+function updateStorage() {
+  const index = users.findIndex((u) => u.username === currentUser.username);
+  if (index >= 0) {
+    users[index] = currentUser;
+  }
+  localStorage.setItem("users", JSON.stringify(users));
 }
 
 function logout() {
-  localStorage.removeItem("currentUser");
   currentUser = null;
-  document.getElementById("auth-section").style.display = "block";
-  document.getElementById("app-section").style.display = "none";
+  document.getElementById("auth-section").classList.remove("hidden");
+  document.getElementById("app-section").classList.add("hidden");
 }
 
-// ===== PROFILE LOGIC =====
-function saveProfile() {
-  if (!currentUser) return;
-
-  currentUser.profile = {
-    name: document.getElementById("profile-name").value,
-    id: document.getElementById("profile-id").value,
-    dob: document.getElementById("profile-dob").value,
-    email: document.getElementById("profile-email").value,
-  };
-
-  const index = users.findIndex((u) => u.username === currentUser.username);
-  users[index] = currentUser;
-  localStorage.setItem("users", JSON.stringify(users));
-  localStorage.setItem("currentUser", JSON.stringify(currentUser));
-
-  alert("Profile updated!");
+function openModal(id) {
+  document.getElementById(id).style.display = "flex";
 }
-
-function loadProfile() {
-  if (!currentUser) return;
-
-  document.getElementById("profile-name").value =
-    currentUser.profile.name || "";
-  document.getElementById("profile-id").value = currentUser.profile.id || "";
-  document.getElementById("profile-dob").value = currentUser.profile.dob || "";
-  document.getElementById("profile-email").value =
-    currentUser.profile.email || "";
+function closeModal(id) {
+  document.getElementById(id).style.display = "none";
 }
+document
+  .getElementById("profile-btn")
+  .addEventListener("click", () => openModal("profile-modal"));
 
-// ===== MODAL LOGIC =====
-function openModal(title, price) {
-  document.getElementById("modal-title").innerText = title;
-  document.getElementById("modal-price").innerText = price;
-  document.getElementById("modal").style.display = "block";
+// SIMULATED ORDER & DRIVER TRACKING
+function simulateOrder() {
+  const status = document.getElementById("order-status");
+  status.innerText = "🚚 Your order is on the way!";
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += 10;
+    status.innerText = `🚚 Driver is ${progress}% of the way`;
+    if (progress >= 100) {
+      clearInterval(interval);
+      status.innerText = "✅ Order delivered!";
+    }
+  }, 1000);
 }
-
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
-}
-
-// Auto-login if user is saved
-window.onload = function () {
-  const savedUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (savedUser) {
-    currentUser = savedUser;
-    document.getElementById("auth-section").style.display = "none";
-    document.getElementById("app-section").style.display = "block";
-    loadProfile();
-  }
-};
