@@ -1,148 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cannavan Delivery App</title>
-<link rel="stylesheet" href="styles.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cannavan Delivery App</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- AUTH SECTION -->
+    <div class="auth-container" id="auth-section">
+      <h1>🌿 Cannavan Delivery</h1>
+      <video autoplay muted loop class="login-gif">
+        <source src="images/tfggckfklrk11.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
 
-<!-- AUTH SECTION -->
-<div class="auth-container" id="auth-section">
-  <h1>🌿 Cannavan Delivery</h1>
-  <img src="images/login.gif" alt="Cannabis gif" class="login-gif">
+      <!-- Login Form -->
+      <form id="loginForm" class="form active">
+        <h2>Login</h2>
+        <input type="text" id="loginUsername" placeholder="Username" required />
+        <div class="password-wrapper">
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            required
+          />
+          <button type="button" onclick="togglePassword('loginPassword')">
+            👁
+          </button>
+        </div>
+        <button type="submit">Login</button>
+        <p>
+          Not a member?
+          <a href="#" onclick="switchForm('signupForm')">Sign Up</a>
+        </p>
+      </form>
 
-  <!-- Login Form -->
-  <form id="loginForm" class="form active">
-    <h2>Login</h2>
-    <input type="text" id="loginUsername" placeholder="Username" required>
-    <div class="password-wrapper">
-      <input type="password" id="loginPassword" placeholder="Password" required>
-      <button type="button" onclick="togglePassword('loginPassword')">👁</button>
+      <!-- Signup Form -->
+      <form id="signupForm" class="form hidden">
+        <h2>Sign Up</h2>
+        <input type="text" id="fullName" placeholder="Full Name" required />
+        <input type="text" id="idNumber" placeholder="ID Number" required />
+        <input type="date" id="dob" required />
+        <input type="email" id="email" placeholder="Email Address" required />
+        <input type="text" id="address" placeholder="Address" required />
+        <input type="file" id="profilePic" accept="image/*" />
+        <input
+          type="text"
+          id="signupUsername"
+          placeholder="Username"
+          required
+        />
+        <div class="password-wrapper">
+          <input
+            type="password"
+            id="signupPassword"
+            placeholder="Password"
+            required
+          />
+          <button type="button" onclick="togglePassword('signupPassword')">
+            👁
+          </button>
+        </div>
+        <div class="password-wrapper">
+          <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm Password"
+            required
+          />
+          <button type="button" onclick="togglePassword('confirmPassword')">
+            👁
+          </button>
+        </div>
+        <button type="submit">Sign Up</button>
+        <p>
+          Already a member?
+          <a href="#" onclick="switchForm('loginForm')">Login</a>
+        </p>
+      </form>
     </div>
-    <button type="submit">Login</button>
-    <p>Not a member? <a href="#" onclick="switchForm('signupForm')">Sign Up</a></p>
-  </form>
 
-  <!-- Signup Form -->
-  <form id="signupForm" class="form hidden">
-    <h2>Sign Up</h2>
-    <input type="text" id="fullName" placeholder="Full Name" required>
-    <input type="text" id="idNumber" placeholder="ID Number" required>
-    <input type="date" id="dob" required>
-    <input type="email" id="email" placeholder="Email Address" required>
-    <input type="text" id="address" placeholder="Address" required>
-    <input type="file" id="profilePic" accept="image/*">
-    <input type="text" id="signupUsername" placeholder="Username" required>
-    <div class="password-wrapper">
-      <input type="password" id="signupPassword" placeholder="Password" required>
-      <button type="button" onclick="togglePassword('signupPassword')">👁</button>
-    </div>
-    <div class="password-wrapper">
-      <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-      <button type="button" onclick="togglePassword('confirmPassword')">👁</button>
-    </div>
-    <button type="submit">Sign Up</button>
-    <p>Already a member? <a href="#" onclick="switchForm('loginForm')">Login</a></p>
-  </form>
-</div>
+    <!-- APP SECTION -->
+    <div class="section-container hidden" id="app-section">
+      <!-- HEADER -->
+      <header class="app-header">
+        <div class="user-actions">
+          <button id="profile-btn">⚙️ Settings</button>
+          <button onclick="logout()">Logout</button>
+        </div>
+        <h1>Welcome, <span id="user-name"></span></h1>
+      </header>
 
-<!-- APP SECTION -->
-<div class="section-container hidden" id="app-section">
+      <!-- DELIVERY TRACKING -->
+      <section id="delivery-section">
+        <h2>Your Delivery</h2>
+        <p id="order-status">No active order</p>
+        <div id="map-placeholder">
+          <!-- This could be replaced by a Google Maps or Mapbox iframe for live tracking -->
+          <p>🚚 Driver location will appear here</p>
+        </div>
+        <button onclick="simulateOrder()">Order Product</button>
+      </section>
 
-  <!-- HEADER -->
-  <header class="app-header">
-    <div class="user-actions">
-      <button id="profile-btn">⚙️ Settings</button>
-      <button onclick="logout()">Logout</button>
+      <!-- PRODUCTS GRID -->
+      <section class="categories-grid">
+        <div class="category-card" onclick="openModal('indica')">
+          <img src="images/indica.jpg" alt="Indica" />
+          <h2>Indica</h2>
+        </div>
+        <div class="category-card" onclick="openModal('sativa')">
+          <img src="images/sativa.jpg" alt="Sativa" />
+          <h2>Sativa</h2>
+        </div>
+        <div class="category-card" onclick="openModal('hybrid')">
+          <img src="images/hybrid.jpg" alt="Hybrid" />
+          <h2>Hybrid</h2>
+        </div>
+        <div class="category-card" onclick="openModal('cbd')">
+          <img src="images/CBD-oils.jpg" alt="CBD" />
+          <h2>CBD</h2>
+        </div>
+      </section>
     </div>
-    <h1>Welcome, <span id="user-name"></span></h1>
-  </header>
 
-  <!-- DELIVERY TRACKING -->
-  <section id="delivery-section">
-    <h2>Your Delivery</h2>
-    <p id="order-status">No active order</p>
-    <div id="map-placeholder">
-      <!-- This could be replaced by a Google Maps or Mapbox iframe for live tracking -->
-      <p>🚚 Driver location will appear here</p>
+    <!-- MODALS -->
+    <!-- PROFILE MODAL -->
+    <div class="modal" id="profile-modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('profile-modal')">&times;</span>
+        <h2>Edit Profile</h2>
+        <img id="profile-img" src="" alt="Profile Picture" />
+        <input type="text" id="edit-fullName" placeholder="Full Name" />
+        <input type="text" id="edit-idNumber" placeholder="ID Number" />
+        <input type="date" id="edit-dob" />
+        <input type="email" id="edit-email" placeholder="Email" />
+        <input type="text" id="edit-address" placeholder="Address" />
+        <input type="file" id="edit-pic" accept="image/*" />
+        <button onclick="saveProfile()">Save Profile</button>
+      </div>
     </div>
-    <button onclick="simulateOrder()">Order Product</button>
-  </section>
 
-  <!-- PRODUCTS GRID -->
-  <section class="categories-grid">
-    <div class="category-card" onclick="openModal('indica')">
-      <img src="images/indica.jpg" alt="Indica">
-      <h2>Indica</h2>
+    <!-- PRODUCT MODALS -->
+    <div class="modal" id="indica">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('indica')">&times;</span>
+        <h2>Indica Products</h2>
+        <p>🍃 Northern Lights - $12/g</p>
+        <p>🍃 Purple Kush - $15/g</p>
+      </div>
     </div>
-    <div class="category-card" onclick="openModal('sativa')">
-      <img src="images/sativa.jpg" alt="Sativa">
-      <h2>Sativa</h2>
+    <div class="modal" id="sativa">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('sativa')">&times;</span>
+        <h2>Sativa Products</h2>
+        <p>🔥 Sour Diesel - $13/g</p>
+        <p>🔥 Jack Herer - $14/g</p>
+      </div>
     </div>
-    <div class="category-card" onclick="openModal('hybrid')">
-      <img src="images/hybrid.jpg" alt="Hybrid">
-      <h2>Hybrid</h2>
+    <div class="modal" id="hybrid">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('hybrid')">&times;</span>
+        <h2>Hybrid Products</h2>
+        <p>🌿 Girl Scout Cookies - $16/g</p>
+        <p>🌿 Wedding Cake - $18/g</p>
+      </div>
     </div>
-    <div class="category-card" onclick="openModal('cbd')">
-      <img src="images/cbd.jpg" alt="CBD">
-      <h2>CBD</h2>
+    <div class="modal" id="cbd">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('cbd')">&times;</span>
+        <h2>CBD Products</h2>
+        <p>💧 CBD Oil - $25</p>
+        <p>💧 CBD Gummies - $20</p>
+      </div>
     </div>
-  </section>
-</div>
 
-<!-- MODALS -->
-<!-- PROFILE MODAL -->
-<div class="modal" id="profile-modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('profile-modal')">&times;</span>
-    <h2>Edit Profile</h2>
-    <img id="profile-img" src="" alt="Profile Picture">
-    <input type="text" id="edit-fullName" placeholder="Full Name">
-    <input type="text" id="edit-idNumber" placeholder="ID Number">
-    <input type="date" id="edit-dob">
-    <input type="email" id="edit-email" placeholder="Email">
-    <input type="text" id="edit-address" placeholder="Address">
-    <input type="file" id="edit-pic" accept="image/*">
-    <button onclick="saveProfile()">Save Profile</button>
-  </div>
-</div>
-
-<!-- PRODUCT MODALS -->
-<div class="modal" id="indica">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('indica')">&times;</span>
-    <h2>Indica Products</h2>
-    <p>🍃 Northern Lights - $12/g</p>
-    <p>🍃 Purple Kush - $15/g</p>
-  </div>
-</div>
-<div class="modal" id="sativa">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('sativa')">&times;</span>
-    <h2>Sativa Products</h2>
-    <p>🔥 Sour Diesel - $13/g</p>
-    <p>🔥 Jack Herer - $14/g</p>
-  </div>
-</div>
-<div class="modal" id="hybrid">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('hybrid')">&times;</span>
-    <h2>Hybrid Products</h2>
-    <p>🌿 Girl Scout Cookies - $16/g</p>
-    <p>🌿 Wedding Cake - $18/g</p>
-  </div>
-</div>
-<div class="modal" id="cbd">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('cbd')">&times;</span>
-    <h2>CBD Products</h2>
-    <p>💧 CBD Oil - $25</p>
-    <p>💧 CBD Gummies - $20</p>
-  </div>
-</div>
-
-<script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
